@@ -28,10 +28,10 @@ module Antigate
   		@max_len = 0
   	end
 
-  	def recognize(url, ext)
+  	def recognize(file, ext)
   		added = nil
   		loop do
-  			added = add(url, ext)
+  			added = add(file, ext)
         next if added.nil?
   			if added.include? 'ERROR_NO_SLOT_AVAILABLE'
   				sleep(1)
@@ -60,13 +60,12 @@ module Antigate
   		end
   	end
 
-  	def add(url, ext)
-  		captcha = Net::HTTP.get(URI(url)) rescue nil
-  		if captcha
+  	def add(file, ext)
+  		if file
   			params = {
   				'method' => 'base64',
   				'key' => @key,
-  				'body' => Base64.encode64(captcha),
+  				'body' => Base64.encode64(file),
   				'ext' => ext,
   				'phrase' => @phrase,
   				'regsense' => @regsense,
